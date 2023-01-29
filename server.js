@@ -56,7 +56,7 @@ app.get('/weatherData', (req, res, next) => {
 class Forecast {
   constructor(city) {
     //trying to match city to search query
-    let newCity = weatherData.find(list => list.city_name === city);
+    let newCity = weatherData.find(list => list.city_name.toLowerCase() === city.toLowerCase());
     this.city = newCity;
   }
 
