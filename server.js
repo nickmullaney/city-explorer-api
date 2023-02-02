@@ -1,6 +1,9 @@
 'use strict';
+
+const axios = require('axios');
+
 //first install dotenv, cors, express with npm i _____
-const weatherData = require('./data/weather.json');
+// const weatherData = require('./data/weather.json');
 
 //.env library access
 require('dotenv').config();
@@ -13,7 +16,7 @@ const app = express();
 
 //Bringing in cors
 const cors = require('cors');
-const { request } = require('http');
+// const { request } = require('http');
 
 // anyone can make a request to our server
 app.use(cors());
@@ -33,19 +36,16 @@ app.get('/bananas', (req, res) => {
 });
 
 //make a route to data
-app.get('/weather', (req, res) => {
+app.get('/weather', async(req, res, next) => {
   //send our weather data
-  res.send(weatherData);
-});
-
-// Sends back list based on query parameter `weather`
-app.get('/weatherData', (req, res, next) => {
+  // https://api.weatherbit.io/v2.0/current?city=seattle&key=df020ca95ee34ca48e6167d780b287b5
   try {
     let city = req.query.searchQuery;
-    console.log('City = ', city);
-    let myCity = new Forecast(city);
-    let formattedList = myCity.getItems();
-    res.status(200).send(formattedList);
+    let liveWeatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${process.env.REACT_APP_WEATHER_API_KEY}`;
+    let response = await axios.get(liveWeatherUrl);
+    console.log(response.data);
+    let descriptions = response.data.data.map(day=> new Forecast(day));
+    res.status(200).send(descriptions);
   }
   catch (error) {
     next(error);
@@ -55,14 +55,14 @@ app.get('/weatherData', (req, res, next) => {
 class Forecast {
   constructor(city) {
     //trying to match city to search query
-    let newCity = weatherData.find(list => list.city_name.toLowerCase() === city.toLowerCase());
-    this.city = newCity;
+    this.date = city.datetime;
+    this.description = city.weather.description;
   }
 
   // 
   getItems() {
     return this.city.data.map(items => {
-      return {valid_date: items.valid_date, description: items.weather.description};
+      return { valid_date: items.valid_date, description: items.weather.description };
     });
   }
 }
