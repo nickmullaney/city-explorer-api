@@ -1,6 +1,5 @@
 'use strict';
 //first install dotenv, cors, express with npm i _____
-
 const weatherData = require('./data/weather.json');
 
 //.env library access
@@ -29,8 +28,8 @@ app.get('/', (request, response) => {
 
 //this example if you type in localhost:3001/bananas it will display "this is bananas"
 app.get('/bananas', (req, res) => {
-  console.log("Hey Im here");
-  res.send('This is bananas')
+  console.log('Hey Im here');
+  res.send('This is bananas');
 });
 
 //make a route to data
@@ -43,7 +42,7 @@ app.get('/weather', (req, res) => {
 app.get('/weatherData', (req, res, next) => {
   try {
     let city = req.query.searchQuery;
-    console.log("City = ", city);
+    console.log('City = ', city);
     let myCity = new Forecast(city);
     let formattedList = myCity.getItems();
     res.status(200).send(formattedList);
