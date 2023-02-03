@@ -57,6 +57,34 @@ app.get('/weather', async(req, res, next) => {
   }
 });
 
+app.get('/movies', async(req, res, next) => {
+  //send our weather data
+ 
+  try {
+    // city is our new search query
+    let city = req.query.searchQuery;
+    // this is our URL to take us to the live weather API
+    let liveMovieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_MOVIE_API_KEY}&query=${city}`
+    
+    // response to get the live weather data
+    let response = await axios.get(liveMoviesUrl);
+    console.log(response.data);
+    // function to feed the weather data from the specific days into our Forcast Class
+    let descriptions = response.data.data.map(day=> new Forecast(day));
+    // Send out our descriptions data
+    res.status(200).send(descriptions);
+  }
+  catch (error) {
+    next(error);
+  }
+});
+
+class Movies{
+  constructor(city){
+    this.
+  }
+}
+
 class Forecast {
   constructor(city) {
     //takes in city data and breaks it into date and description to be used on the front end. 
