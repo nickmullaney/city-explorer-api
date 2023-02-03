@@ -1,6 +1,9 @@
 'use strict';
+
+const axios = require('axios');
+
 //first install dotenv, cors, express with npm i _____
-const weatherData = require('./data/weather.json');
+// const weatherData = require('./data/weather.json');
 
 //.env library access
 require('dotenv').config();
@@ -13,7 +16,7 @@ const app = express();
 
 //Bringing in cors
 const cors = require('cors');
-const { request } = require('http');
+// const { request } = require('http');
 
 // anyone can make a request to our server
 app.use(cors());
@@ -32,41 +35,77 @@ app.get('/bananas', (req, res) => {
   res.send('This is bananas');
 });
 
-//make a route to data
-app.get('/weather', (req, res) => {
+//make a route to our data
+app.get('/weather', async(req, res, next) => {
   //send our weather data
-  res.send(weatherData);
-});
-
-// Sends back list based on query parameter `weather`
-app.get('/weatherData', (req, res, next) => {
+ 
   try {
+    // city is our new search query
     let city = req.query.searchQuery;
-    console.log('City = ', city);
-    let myCity = new Forecast(city);
-    let formattedList = myCity.getItems();
-    res.status(200).send(formattedList);
+    // this is our URL to take us to the live weather API
+    let liveWeatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${process.env.REACT_APP_WEATHER_API_KEY}&days=10`;
+    // response to get the live weather data
+    let response = await axios.get(liveWeatherUrl);
+    console.log(response.data);
+    // function to feed the weather data from the specific days into our Forcast Class
+    let descriptions = response.data.data.map(day=> new Forecast(day));
+    // Send out our descriptions data
+    res.status(200).send(descriptions);
   }
   catch (error) {
     next(error);
   }
 });
 
+app.get('/movies', async(req, res, next) => {
+  //send our weather data
+ 
+  try {
+    // city is our new search query
+    let movie = req.query.searchQuery;
+    // this is our URL to take us to the live weather API
+    let liveMovieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_MOVIE_API_KEY}&query=${movie}`
+    console.log("Live Movie URL",liveMovieUrl)
+    // response to get the live weather data
+    let response = await axios.get(liveMovieUrl);
+    console.log(response.data);
+    // function to feed the weather data from the specific days into our Forcast Class
+    let descriptions = response.data.results.map(movie=> new Movies(movie));
+    // Send out our descriptions data
+    res.status(200).send(descriptions);
+  }
+  catch (error) {
+    next(error);
+  }
+});
+
+class Movies{
+  constructor(movie){
+    this.title = movie.title,
+    this.overview = movie.overview,
+    this.average_votes = movie.vote_average,
+    this.poster = movie.poster_path,
+    this.popularity = movie.popularity,
+    this.released_on = movie.release_date
+  };
+}
+
 class Forecast {
   constructor(city) {
-    //trying to match city to search query
-    let newCity = weatherData.find(list => list.city_name.toLowerCase() === city.toLowerCase());
-    this.city = newCity;
+    //takes in city data and breaks it into date and description to be used on the front end. 
+    // This is the data we send to the front
+    this.date = city.datetime;
+    this.description = city.weather.description;
   }
 
-  // 
+  // Irrelevent
   getItems() {
     return this.city.data.map(items => {
-      return {valid_date: items.valid_date, description: items.weather.description};
+      return { valid_date: items.valid_date, description: items.weather.description };
     });
   }
 }
-
+// Error response and log
 app.use((error, request, response, next) => {
   console.log(error);
   response.status(500).send(error);
