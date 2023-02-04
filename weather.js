@@ -11,7 +11,6 @@ function getWeather(req, res, next) {
     let descriptions = response.data.data.map(day=> new Forecast(day));
     res.status(200).send(descriptions);
   })
-  
   .catch(error => next(error));
 }
   class Forecast {
