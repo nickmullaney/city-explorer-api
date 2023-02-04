@@ -1,5 +1,4 @@
 const axios = require('axios');
-const { response } = require('express');
 
 function getMovies(req, res, next) {
   //send our weather data
@@ -15,7 +14,6 @@ function getMovies(req, res, next) {
     .catch(error => next(error));
 };
 
-
 class Movies {
   constructor(movie) {
     this.title = movie.title,
@@ -27,7 +25,7 @@ class Movies {
   };
 }
 
-module.exports = getMovies;
+module.exports = {getMovies};
 
 // Original Try Catch
       // try {

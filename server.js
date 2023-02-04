@@ -14,8 +14,8 @@ const app = express();
 
 //Bringing in cors
 const cors = require('cors');
-const getMovies = require('./movies');
-const getWeather = require('./weather');
+const {getMovies} = require('./movies');
+const {getWeather} = require('./weather');
 // const { request } = require('http');
 
 // anyone can make a request to our server

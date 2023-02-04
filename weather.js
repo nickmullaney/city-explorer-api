@@ -13,7 +13,7 @@ function getWeather(req, res, next) {
   })
   
   .catch(error => next(error));
-  
+}
   class Forecast {
     constructor(city) {
     //takes in city data and breaks it into date and description to be used on the front end. 
@@ -23,7 +23,7 @@ function getWeather(req, res, next) {
   };
 }
 
-module.exports = getWeather;
+module.exports = {getWeather};
 
 // Original Try Catch
 
@@ -40,4 +40,3 @@ module.exports = getWeather;
 //   // Send out our descriptions data
 //   res.status(200).send(descriptions);
 // }
-};
