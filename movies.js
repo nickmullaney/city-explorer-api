@@ -6,11 +6,9 @@ function getMovies(req, res, next) {
   const liveMovieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_MOVIE_API_KEY}&query=${movie}`;
 
   axios.get(liveMovieUrl)
-    .then(response => {
-      let descriptions = response.data.results.map(movie => new Movies(movie));
-      // Send out our descriptions data
-      res.status(200).send(descriptions);
-    })
+  // Returns promise of array of movies
+    .then(response => response.data.results.map(movie => new Movies(movie)))
+    .then(formattedMovieArray => res.status(200).send(formattedMovieArray))
     .catch(error => next(error));
 };
 
@@ -26,6 +24,11 @@ class Movies {
 }
 
 module.exports = {getMovies};
+
+
+// let descriptions = response.data.results.map(movie => new Movies(movie));
+// // Send out our descriptions data
+// res.status(200).send(descriptions);
 
 // Original Try Catch
       // try {
