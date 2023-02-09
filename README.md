@@ -74,13 +74,6 @@ Estimate of time needed to complete: 6 hours
 Actual time needed to complete: 5 hours
 
 
-Name of feature: Frontend Styling
-
-Estimate of time needed to complete: 3 hours
-
-Actual time needed to complete: 2 hours
-
-
 Name of feature: API integration for Movies and Weather
 
 Estimate of time needed to complete: 4 hours
