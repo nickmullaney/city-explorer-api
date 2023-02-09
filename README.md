@@ -42,7 +42,7 @@ You must have a complete README.md for both your server and your website reposit
 
 Your README.md must include:
 
-# Project Name
+# City Explorer
 
 **Author**: Nick M
 **Version**: 1.2.3 (increment the patch/fix version number if you make more commits past your first submission)
