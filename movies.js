@@ -1,16 +1,34 @@
 const axios = require('axios');
+let cache = require('./cache.js')
 
 function getMovies(req, res, next) {
   //send our weather data
   let movie = req.query.searchQuery;
+  const key = 'movie-' + movie;
   const liveMovieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_MOVIE_API_KEY}&query=${movie}`;
 
-  axios.get(liveMovieUrl)
-  // Returns promise of array of movies
+  if(cache[key] && (Date.now() - cache[key].timestamp < 50000)){
+    console.log('Movie Cache hit');
+    res.status(200).send(cache[key].data);
+  }else{
+    console.log('Movie Cache Miss');
+    cache[key] = {};
+    cache[key].timestamp = Date.now();
+    axios.get(liveMovieUrl)
     .then(response => response.data.results.map(movie => new Movies(movie)))
-    .then(formattedMovieArray => res.status(200).send(formattedMovieArray))
+    .then(formattedData => {
+      cache[key].data = formattedData;
+      res.status(200).send(formattedData)
+    })
     .catch(error => next(error));
-};
+  }
+}
+//   axios.get(liveMovieUrl)
+//   // Returns promise of array of movies
+//     .then(response => response.data.results.map(movie => new Movies(movie)))
+//     .then(formattedMovieArray => res.status(200).send(formattedMovieArray))
+//     .catch(error => next(error));
+// };
 
 class Movies {
   constructor(movie) {

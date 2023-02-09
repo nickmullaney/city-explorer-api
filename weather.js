@@ -1,18 +1,40 @@
 const axios = require('axios');
 
+let cache = require('./cache.js');
+
 //make a route to our data
 function getWeather(req, res, next) {
   //send our weather data
   let city = req.query.searchQuery;
+  const key = 'weather-'+ city;
   const liveWeatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${process.env.REACT_APP_WEATHER_API_KEY}&days=10`;
 
-  axios.get(liveWeatherUrl)
-  .then(response =>{
-    let descriptions = response.data.data.map(day=> new Forecast(day));
-    res.status(200).send(descriptions);
-  })
-  .catch(error => next(error));
+  if(cache[key] && (Date.now() - cache[key].timestamp < 50000)){
+    console.log('Weather Cache hit');
+    res.status(200).send(cache[key].data);
+  } else {
+    console.log('Weather Cache Miss');
+    cache[key] = {};
+    cache[key].timestamp = Date.now();
+    //because async it won't load in time to return cache data
+    axios.get(liveWeatherUrl)
+    .then(response => response.data.data.map(day => new Forecast(day)))
+    // saves cache data in formatted data then sends it
+    .then(formattedData => 
+      {cache[key].data = formattedData;
+      res.status(200).send(formattedData)
+      })
+    .catch(error => next(error));
+  }
 }
+
+//   axios.get(liveWeatherUrl)
+//   .then(response =>{
+//     let descriptions = response.data.data.map(day=> new Forecast(day));
+//     res.status(200).send(descriptions);
+//   })
+//   .catch(error => next(error));
+// }
   class Forecast {
     constructor(city) {
     //takes in city data and breaks it into date and description to be used on the front end. 
