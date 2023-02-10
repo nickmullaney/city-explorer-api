@@ -42,10 +42,10 @@ You must have a complete README.md for both your server and your website reposit
 
 Your README.md must include:
 
-# Project Name
+# City Explorer
 
 **Author**: Nick M
-**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+**Version**: 1.2.3 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
 Building an application that will integrate with different API's to get city data and relevant weather and restaurant information 
@@ -54,10 +54,11 @@ Building an application that will integrate with different API's to get city dat
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
 
 ## Architecture
-<!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
+This website uses HTML, Javascript CSS, React, Bootstrap.
+This website uses API pulls from locationIQ, Weatherbug, and MovieDB
 
 ## Change Log
-<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an example:
+2-8-2023 8:03PM Finalized API and Cache integration with Weather and Movies
 
 01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
 
@@ -66,15 +67,28 @@ Building an application that will integrate with different API's to get city dat
 Time Estimates
 For each of the lab features, make an estimate of the time it will take you to complete the feature, and record your start and finish times for that feature:
 
-Name of feature: ________________________________
+Name of feature: Backend Server
 
-Estimate of time needed to complete: _____
+Estimate of time needed to complete: 6 hours
 
-Start time: _____
+Actual time needed to complete: 5 hours
 
-Finish time: _____
 
-Actual time needed to complete: _____
+Name of feature: API integration for Movies and Weather
+
+Estimate of time needed to complete: 4 hours
+
+Actual time needed to complete: 5 hours
+
+
+Name of feature: Cache addition
+
+Estimate of time needed to complete: 3 hours
+
+Actual time needed to complete: 1.5 hours
+
+
+
 Add this information to your README.
 
 Submission Instructions
