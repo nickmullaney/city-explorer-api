@@ -16,6 +16,7 @@ const app = express();
 const cors = require('cors');
 const {getMovies} = require('./movies');
 const {getWeather} = require('./weather');
+const getYelpInfo = require('./yelp')
 // const { request } = require('http');
 
 // anyone can make a request to our server
@@ -39,6 +40,8 @@ app.get('/bananas', (req, res) => {
 app.get('/weather', getWeather);
 
 app.get('/movies', getMovies);
+
+app.get('/yelp', getYelpInfo);
 
 // Error response and log
 app.use((error, request, response, next) => {
