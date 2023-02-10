@@ -40,7 +40,7 @@ class Yelp{
     this.image_url = city.image_url;
     this.price = city.price;
     this.rating = city.rating;
-    this.url = city.url;
+    this.url = city.url; 
   }
 }
 
